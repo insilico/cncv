@@ -18,7 +18,11 @@ library(devtools)
 if (!("privateEC" %in% installed.packages()[,"Package"])){
   devtools::install_github("insilico/privateEC") # build_vignettes = TRUE)
 }
+if (!("cncv" %in% installed.packages()[,"Package"])){
+  devtools::install_github("insilico/cncv", build_vignettes = TRUE)
+}
 library(privateEC)  # used to simulate data
+library(cncv)
 ```
 
 Simulate data with privateEC
