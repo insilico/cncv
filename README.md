@@ -40,9 +40,9 @@ install.packages(c('randomForest', 'glmnet', 'xgboost', 'caret', 'CORElearn))
 ```
 
 ### Examples
-```
-https://github.com/insilico/cncv/blob/master/Vignettes/cncvExample.md
-```
+
+[https://github.com/insilico/cncv/blob/master/Vignettes/cncvExample.md](https://github.com/insilico/cncv/blob/master/Vignettes/cncvExample.md)
+
 
 
 ### Abstract
