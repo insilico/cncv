@@ -80,6 +80,8 @@ consensus_nestedCV <- function(train.ds = NULL,
                                tuneGrid = NULL,
                                relief.k.method = "k_half_sigma",
                                num_tree = 500, 
+                               covars_vec = covars_vec,
+                               covars.pval.adj = 0.05,
                                verbose = FALSE){
   if (is.numeric(relief.k.method)) {
     if (relief.k.method > floor((dim(train.ds)[1]-1)/2)){
@@ -309,6 +311,19 @@ consensus_nestedCV <- function(train.ds = NULL,
             top_vars <- names(sort(ranked_vars, decreasing = TRUE)[1:wrapper.topN])
           }
         }
+      }
+      if(!is.null(covars_vec)){
+        cat("Adjusting for covariates...\n")
+        train.data_fltr <- train.ds[inner_idx, c(top_vars, "class")]
+        inner_covars_vec <- covars_vec[inner_idx]
+        npdr.results <- npdr('class', train.data_fltr, 
+                             regression.type='glm', attr.diff.type='numeric-abs',
+                             nbd.method='multisurf', nbd.metric = 'manhattan',
+                             covars=inner_covars_vec,  # works with sex.covar.mat as well
+                             covar.diff.type='match-mismatch', # for categorical covar like sex
+                             msurf.sd.frac=0.5, padj.method='bonferroni')
+        
+        top_vars <- npdr.results[npdr.results$pval.adj<covars.pval.adj, "att"]
       }
       atts[[j]] <- top_vars
     }
