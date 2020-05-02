@@ -1,0 +1,33 @@
+Package: cncv
+Title: Consensus Features Nested Cross-Validation
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Saeid",
+           family = "Parvandeh",
+           role = c("aut", "cre"),
+           email = "parvandehsaied@gmail.com",
+           comment = c(ORCID = "0000-0003-0917-2784"))
+Description: The cncv is a feature selection algorithm that is in the Bioinformatics paper referenced below:
+        Saeid Parvandeh, Hung-Wen Yeh, Martin P Paulus, Brett A McKinney, Consensus features nested cross-validation, Bioinformatics, btaa046, https://doi.org/10.1093/bioinformatics/btaa046
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.0
+Imports:
+    randomForest,
+    xgboost,
+    glmnet,
+    CORElearn,
+    reshape2,
+    caret,
+    glmnet,
+    stats,
+    utils
+Suggests: 
+    testthat,
+    knitr,
+    rmarkdown,
+    devtools,
+    roxygen2
+VignetteBuilder: knitr
