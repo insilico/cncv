@@ -23,7 +23,7 @@ consensus_nestedCV(
   tuneGrid = NULL,
   relief.k.method = "k_half_sigma",
   num_tree = 500,
-  covars_vec = covars_vec,
+  covars_vec = NULL,
   covars.pval.adj = 0.05,
   verbose = FALSE
 )
