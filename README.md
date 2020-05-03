@@ -1,6 +1,7 @@
 
 # Consensus Nested Cross-Validation
 
+
 #### Websites
 
 [insilico Github Organization](https://github.com/insilico)
@@ -8,6 +9,8 @@
 [insilico McKinney Lab](http://insilico.utulsa.edu/)
 
 #### Related References. 
+
+[2020 Consensus Features Nested Cross-Validation paper in Bioinformatics](https://doi.org/10.1093/bioinformatics/btaa046)
 
 [2018 EpistasisRank and EpistasisKatz paper in Bioinformatics](https://doi.org/10.1093/bioinformatics/bty965)
 
