@@ -911,8 +911,8 @@ regular_nestedCV <- function(train.ds = NULL,
 #'   \item{FN}{False Negative}
 #'   \item{TPR}{True Positive Rate}
 #'   \item{FPR}{False Positive Rate}
-#'   \item{precision}
-#'   \item{recall}
+#'   \item{precision}{Fraction of relevant features among the retrieved features}
+#'   \item{recall}{Fraction of total relevant features that were actually retrieved}
 #' } 
 #' num.samples <- 100
 #' num.variables <- 100
