@@ -345,9 +345,7 @@ consensus_nestedCV <- function(train.ds = NULL,
                                   y = trn.pheno,
                                   method = learning_method,
                                   metric = ifelse(is.factor(trn.pheno), "Accuracy", "RMSE"),
-                                  trControl = ifelse(is.null(tuneGrid), 
-                                                     caret::trainControl(method = ifelse(learning_method == "glmnet", "cv", "adaptive_cv"),
-                                                                         number = 10), caret::trainControl()),
+                                  trControl = caret::trainControl(),
                                   tuneGrid = tuneGrid)
       train_pred <- stats::predict(train_model, trn.data)
       train_acc <- ifelse(method.model == "classification", 
@@ -684,9 +682,7 @@ regular_nestedCV <- function(train.ds = NULL,
                                   y = inner_trn.pheno,
                                   method = learning_method,
                                   metric = ifelse(is.factor(inner_trn.pheno), "Accuracy", "RMSE"),
-                                  trControl = ifelse(is.null(tuneGrid), 
-                                                     caret::trainControl(method = ifelse(learning_method == "glmnet", "cv", "adaptive_cv"),
-                                                                         number = 10), caret::trainControl()),
+                                  trControl = caret::trainControl(),
                                   tuneGrid = tuneGrid)
       inner_train_pred <- stats::predict(inner_train_model, inner_trn.data)
       inner_train_acc <- ifelse(method.model == "classification",confusionMatrix(inner_train_pred, inner_trn.pheno)$byClass["Balanced Accuracy"], 
