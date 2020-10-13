@@ -83,34 +83,7 @@ consensus_nestedCV <- function(train.ds = NULL,
                                covars_vec = NULL,
                                covars.pval.adj = 0.05,
                                verbose = FALSE){
-  if (is.numeric(relief.k.method)) {
-    if (relief.k.method > floor((dim(train.ds)[1]-1)/2)){
-      warning("ReliefF k too large. Using maximum.")
-      k <- floor((dim(train.ds)[1]-1)/2) 
-    } else {
-      k <- relief.k.method
-    }
-    # if someone specifies a numeric value (integer hopefully), use this value for k.
-    # However, make sure it is not larger than floor((num.samp.min-1)/2), where
-    # num.samp.min  is the min of the train, holdout.. sample sizes.
-    # Or you could test the inequality when you encounter each data split.
-    # If someone does exceed the threshold, set k to floor((num.samp.min-1)/2) 
-    # and writing warning that says 
-    # "ReliefF k too large. Using maximum." 
-  } else if (relief.k.method ==  "myopic"){
-    k <- floor((dim(train.ds)[1]-1)/2)
-    # where k may change based on num.samp for train, holdout...
-  } else if (relief.k.method ==  "m6") { # default "m6" method
-    k <- floor(dim(train.ds)[1]/6)
-    # where k may change based on num.samp for train, holdout...
-  } else if (relief.k.method == "m4") {
-    k <- floor(dim(train.ds)[1]/4)
-  } else {
-    k <-  floor((dim(train.ds)[1]-1)*0.154)
-  }
-  if (sum(ncv_folds)>(dim(train.ds)[1])/3){
-    stop("There are less than three observations in each fold")
-  }
+  # Define variables
   tune_params <- NULL; accu_vec <- NULL
   Train_accu <- NULL; Test_accu <- NULL
   relief_atts <- list()
@@ -141,6 +114,35 @@ consensus_nestedCV <- function(train.ds = NULL,
         tuneK <- NULL
       } else {
         tuneK <- tune.k
+      }
+      
+      # if someone specifies a numeric value (integer hopefully), use this value for k.
+      # However, make sure it is not larger than floor((num.samp.min-1)/2), where
+      # num.samp.min  is the min of the train, holdout.. sample sizes.
+      # Or you could test the inequality when you encounter each data split.
+      # If someone does exceed the threshold, set k to floor((num.samp.min-1)/2) 
+      # and writing warning that says 
+      # "ReliefF k too large. Using maximum." 
+      if (is.numeric(relief.k.method)) {
+        if (relief.k.method > floor((dim(train.ds[inner_idx, ])[1]-1)/2)){
+          warning("ReliefF k too large. Using maximum.")
+          k <- floor((dim(train.ds[inner_idx, ])[1]-1)/2) 
+        } else {
+          k <- relief.k.method
+        }
+      } else if (relief.k.method ==  "myopic"){
+        k <- floor((dim(train.ds[inner_idx, ])[1]-1)/2)
+        # where k may change based on num.samp for train, holdout...
+      } else if (relief.k.method ==  "m6") { # default "m6" method
+        k <- floor(dim(train.ds[inner_idx, ])[1]/6)
+        # where k may change based on num.samp for train, holdout...
+      } else if (relief.k.method == "m4") {
+        k <- floor(dim(train.ds[inner_idx, ])[1]/4)
+      } else {
+        k <-  floor((dim(train.ds[inner_idx, ])[1]-1)*0.154)
+      }
+      if (sum(ncv_folds)>(dim(train.ds[inner_idx, ])[1])/3){
+        stop("There are less than three observations in each fold")
       }
 
       k_inner_accs <- NULL
@@ -547,34 +549,7 @@ regular_nestedCV <- function(train.ds = NULL,
                              tuneGrid = NULL,
                              num_tree = 500, 
                              verbose = FALSE){
-  if (is.numeric(relief.k.method)) {
-    if (relief.k.method > floor((dim(train.ds)[1]-1)/2)){
-      warning("ReliefF k too large. Using maximum.")
-      k <- floor((dim(train.ds)[1]-1)/2) 
-    } else {
-      k <- relief.k.method
-    }
-    # if someone specifies a numeric value (integer hopefully), use this value for k.
-    # However, make sure it is not larger than floor((num.samp.min-1)/2), where
-    # num.samp.min  is the min of the train, holdout.. sample sizes.
-    # Or you could test the inequality when you encounter each data split.
-    # If someone does exceed the threshold, set k to floor((num.samp.min-1)/2) 
-    # and writing warning that says 
-    # "ReliefF k too large. Using maximum." 
-  } else if (relief.k.method ==  "myopic"){
-    k <- floor((dim(train.ds)[1]-1)/2)
-    # where k may change based on num.samp for train, holdout...
-  } else if (relief.k.method ==  "m6") { # default "m6" method
-    k <- floor(dim(train.ds)[1]/6)
-    # where k may change based on num.samp for train, holdout...
-  } else if (relief.k.method == "m4") {
-    k <- floor(dim(train.ds)[1]/4)
-  } else {
-    k <- floor((dim(train.ds)[1]-1)*0.154)
-  }
-  if (sum(ncv_folds)>(dim(train.ds)[1])/3){
-    stop("There are less than three observations in each fold")
-  }
+  # Define variables
   relief_atts <- list(); tune_params <- NULL
   Train_accu <- NULL; Test_accu <- NULL
   ptm <- proc.time()
@@ -588,6 +563,36 @@ regular_nestedCV <- function(train.ds = NULL,
     if(verbose){cat("\n Feature Selection and Parameter Tuning...\n")} 
     for (j in 1:length(inner_folds)){
       inner_idx <- which(outer_folds!=i)[-inner_folds[[j]]]
+      
+      # if someone specifies a numeric value (integer hopefully), use this value for k.
+      # However, make sure it is not larger than floor((num.samp.min-1)/2), where
+      # num.samp.min  is the min of the train, holdout.. sample sizes.
+      # Or you could test the inequality when you encounter each data split.
+      # If someone does exceed the threshold, set k to floor((num.samp.min-1)/2) 
+      # and writing warning that says 
+      # "ReliefF k too large. Using maximum." 
+      if (is.numeric(relief.k.method)) {
+        if (relief.k.method > floor((dim(train.ds[inner_idx, ])[1]-1)/2)){
+          warning("ReliefF k too large. Using maximum.")
+          k <- floor((dim(train.ds[inner_idx, ])[1]-1)/2) 
+        } else {
+          k <- relief.k.method
+        }
+      } else if (relief.k.method ==  "myopic"){
+        k <- floor((dim(train.ds[inner_idx, ])[1]-1)/2)
+        # where k may change based on num.samp for train, holdout...
+      } else if (relief.k.method ==  "m6") { # default "m6" method
+        k <- floor(dim(train.ds[inner_idx, ])[1]/6)
+        # where k may change based on num.samp for train, holdout...
+      } else if (relief.k.method == "m4") {
+        k <- floor(dim(train.ds[inner_idx, ])[1]/4)
+      } else {
+        k <- floor((dim(train.ds[inner_idx, ])[1]-1)*0.154)
+      }
+      if (sum(ncv_folds)>(dim(train.ds[inner_idx, ])[1])/3){
+        stop("There are less than three observations in each fold")
+      }
+      
       if (wrapper == "relief"){
         ranked_vars <- CORElearn::attrEval(label, train.ds[inner_idx, ], 
                                            estimator = importance.algorithm,
