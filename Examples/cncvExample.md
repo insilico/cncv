@@ -34,12 +34,15 @@ class.lab <- "class"
 writeData <- F  # usually the same as letsSimulate
 writeResults <- F
 
-num.samp <- 100
+num.samp <- 300
 num.attr <- 1000
 pct.signals <- 0.1
 bias <- 0.4
 #sim.type <- "mainEffect"
 sim.type <- "interactionErdos"
+importance.algorithm = "ReliefFequalK"
+num_tree = 500
+verbose = T
 
 pec_simFile <- paste("pec_simulated", sim.type, "bias", bias, 
                              "pct.signals", pct.signals,
@@ -48,8 +51,8 @@ pec_simFile <- paste(pec_simFile,".csv",sep="")
 
 if (letsSimulate == TRUE){
     sim.data <- createSimulation(num.samples = num.samp, num.variables = num.attr,
-                                 pct.signals = pct.signals, pct.train = 1/2, pct.holdout = 1/2, 
-                                 bias = bias, sim.type = sim.type, verbose = FALSE)
+                                 pct.signals = pct.signals, pct.train = 1/3, pct.holdout = 1/3, 
+                                 pct.validation = 1/3, bias = bias, sim.type = sim.type, verbose = FALSE)
   dat <- rbind(sim.data$train, sim.data$holdout)
   predictors.mat <- dat[, - which(colnames(dat) == class.lab)]
 } else { # optional: use provided data
@@ -99,9 +102,9 @@ cat("\n Elapsed Time [",rncv_result$Elapsed,"]\n")
 
 ### Run Consensus nested CV
 ``` r
-cncv_result <- consensus_nestedCV(train.ds = rbind(data.sets$train,data.sets$holdout), 
-                                  validation.ds =  data.sets$validation, 
-                                  label = data.sets$label,
+cncv_result <- consensus_nestedCV(train.ds = rbind(sim.data$train,sim.data$holdout), 
+                                  validation.ds =  sim.data$validation, 
+                                  label = sim.data$label,
                                   method.model = "classification",
                                   is.simulated = TRUE,
                                   ncv_folds = c(10, 10),
