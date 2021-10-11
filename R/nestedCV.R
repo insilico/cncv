@@ -232,8 +232,12 @@ consensus_nestedCV <- function(train.ds = NULL,
                                            outputNumericSplits=FALSE,
                                            kNearestEqual = ifelse(!is.null(tuneK), ktuned, k))
       } else if (wrapper == "rf") {
-        rf_model <- CORElearn::CoreModel(label, train.ds[inner_idx, ], model = "rf")
-        ranked_vars <- CORElearn::rfAttrEval(rf_model)
+        ranfor.fit <- randomForest::randomForest(as.factor(label) ~ ., data = train.ds[inner_idx, ], ntree = num_tree)
+        rf.importance <- importance(ranfor.fit)  
+        rf.sorted<-sort(rf.importance, decreasing=T, index.return=T)
+        rf.df <-data.frame(att=rownames(rf.importance)[rf.sorted$ix],rf.scores=rf.sorted$x)
+        
+        ranked_vars <- as.character(rf.df[,"att"])
       } else if (wrapper == "glmnet") {
         if(method.model == "classification"){
           Class <- as.factor(train.ds[inner_idx, ncol(train.ds)])
@@ -297,6 +301,15 @@ consensus_nestedCV <- function(train.ds = NULL,
         # selected top optimal percentage genes
         wrapper.topN <- tune.inner_selection_percent[inner_opt_idx]*length(ranked_vars)
         top_vars <- names(sort(ranked_vars, decreasing = TRUE)[1:wrapper.topN])
+      } else if (wrapper == "rf"){
+        
+        if(inner_selection_positivescores==F){
+          wrapper.topN <- round(inner_selection_percent*length(ranked_vars))
+          top_vars <- ranked_vars[1:wrapper.topN]
+        }else{
+          top_vars <- names(ranked_vars.num[which(ranked_vars.num>0)])
+        }
+        
       } else {
         num_ranked_vars <- length(ranked_vars)
         if (num_ranked_vars < wrapper.topN) {
